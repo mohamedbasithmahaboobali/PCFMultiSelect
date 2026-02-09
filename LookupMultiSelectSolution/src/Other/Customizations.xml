@@ -9,7 +9,19 @@
   <EntityRelationships />
   <OrganizationSettings />
   <optionsets />
-  <CustomControls />
+  <CustomControls>
+    <Control>
+      <Id>97f529d0-0000-4000-8000-000000000001</Id>
+      <Name>MultiSelectLookup.LookupMultiSelect</Name>
+      <DisplayName>Multi-Select Lookup</DisplayName>
+      <Description>PCF MultiSelect Lookup control</Description>
+      <ControlFiles>
+        <ControlFile>CustomControls\MultiSelectLookup.LookupMultiSelect\bundle.js</ControlFile>
+        <ControlFile>CustomControls\MultiSelectLookup.LookupMultiSelect\ControlManifest.xml</ControlFile>
+        <ControlFile>CustomControls\MultiSelectLookup.LookupMultiSelect\css\MultiSelectLookup.css</ControlFile>
+      </ControlFiles>
+    </Control>
+  </CustomControls>
   <SolutionPluginAssemblies />
   <EntityDataProviders />
   <Languages>
