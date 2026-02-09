@@ -24,7 +24,9 @@ Files/paths in this repo you will use:
 - NuGet config (points to local feed): [nuget.config](nuget.config)
 - Helper script (optional): [_download_and_build.ps1](_download_and_build.ps1)
 
-## Prepare local NuGet feed (required when nuget.org is blocked)
+## Prepare local NuGet feed (Optional — only if using MSBuild)
+
+If you plan to use **MSBuild** (Option 2 above), you need the local NuGet feed. Otherwise, skip this section.
 
 If your client environment blocks nuget.org, you must place the repository's `LocalNuGetFeed` folder (containing the `.nupkg` files) on the build machine. There are two ways to get the feed into the repo:
 
@@ -67,8 +69,9 @@ Get-Content .\nuget.config
 
 Note: `dotnet restore` may require additional dependency `.nupkg` files. If `dotnet restore` complains about missing packages, obtain the missing `.nupkg` files and add them to `LocalNuGetFeed`, then re-run restore.
 
-## Build the PCF control bundle (no NuGet required)
-1. Install npm dependencies and build the control bundle:
+## Build the PCF control bundle (standalone reference)
+
+To build the PCF bundle independently (without the full pack script):
 
 ```powershell
 cd C:\Basith\MultiSelectPCF\MultiSelectLookup
@@ -76,10 +79,28 @@ npm install
 npm run build
 ```
 
-This produces the compiled control in the `out/controls` folder (used later by the solution pack step).
+This produces the compiled control in the `out/controls` folder (used internally by solution packing).
 
-## Restore & build the Visual Studio solution using the local feed
-Run the restore/build pointing to the repo `nuget.config` so dotnet will use the local feed:
+## Build & Pack Solution (Two Options)
+
+### Option 1: Using PAC CLI (Recommended — No NuGet Required)
+If your environment blocks NuGet packages, use PAC CLI instead:
+
+```powershell
+# Run the provided script (builds PCF + packs solution with PAC)
+cd C:\Basith\MultiSelectPCF
+.\BUILD_AND_PACK_PAC.ps1
+```
+
+This approach:
+- Builds the PCF bundle with `npm` (no NuGet needed)
+- Packs the solution directly using `pac solution pack` (no MSBuild needed)
+- Output: `C:\Basith\MultiSelectPCF\bin\LookupMultiSelectSolution.zip`
+
+**Requirements:** [PAC CLI installed](https://learn.microsoft.com/power-platform/developer/cli/introduction)
+
+### Option 2: Using MSBuild with Local NuGet Feed
+If you have the local NuGet packages available, use MSBuild:
 
 ```powershell
 cd C:\Basith\MultiSelectPCF\LookupMultiSelectSolution
@@ -87,17 +108,18 @@ dotnet restore --configfile ..\nuget.config
 dotnet build
 ```
 
-If `dotnet restore` reports missing packages, copy the missing `.nupkg` files into `C:\Basith\MultiSelectPCF\LocalNuGetFeed` and repeat restore.
+Output: `LookupMultiSelectSolution\bin\Debug\LookupMultiSelectSolution.zip`
 
-## Pack the solution (optional)
-If you changed solution metadata or want to re-generate the ZIP locally, run:
+## Pack the solution (manual step)
+
+If you prefer to pack manually using PAC CLI:
 
 ```powershell
 cd C:\Basith\MultiSelectPCF\LookupMultiSelectSolution
-pac solution pack --zipfile .\bin\Debug\LookupMultiSelectSolution.zip
+pac solution pack --zipfile ..\bin\LookupMultiSelectSolution.zip
 ```
 
-The generated ZIP will be at: `LookupMultiSelectSolution/bin/Debug/LookupMultiSelectSolution.zip`.
+The output ZIP will be at: `C:\Basith\MultiSelectPCF\bin\LookupMultiSelectSolution.zip`
 
 ## Import the solution into your Dataverse environment
 
