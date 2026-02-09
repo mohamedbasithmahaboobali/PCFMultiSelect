@@ -1,3 +1,8 @@
+param(
+    [string]$OutputPathOverride = $null,
+    [string]$SolutionNameOverride = $null
+)
+
 # PowerShell Script: Build PCF and Pack Solution using PAC CLI (no MSBuild)
 # This script does NOT require NuGet packages or .NET Framework build tools
 
@@ -10,11 +15,6 @@ $SolutionPath = Join-Path $RepoRoot "LookupMultiSelectSolution"
 $OutputPath = Join-Path $RepoRoot "bin"
 $SolutionName = "LookupMultiSelectSolution"
 # ============================================
-
-param(
-    [string]$OutputPathOverride = $null,
-    [string]$SolutionNameOverride = $null
-)
 
 # Use override parameters if provided
 if ($OutputPathOverride) { $OutputPath = $OutputPathOverride }
