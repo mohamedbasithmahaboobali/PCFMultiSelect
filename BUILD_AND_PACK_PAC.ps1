@@ -1,13 +1,32 @@
 # PowerShell Script: Build PCF and Pack Solution using PAC CLI (no MSBuild)
 # This script does NOT require NuGet packages or .NET Framework build tools
 
+# ============================================
+# CONFIGURATION - Modify these paths as needed
+# ============================================
+$RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$PcfPath = Join-Path $RepoRoot "MultiSelectLookup"
+$SolutionPath = Join-Path $RepoRoot "LookupMultiSelectSolution"
+$OutputPath = Join-Path $RepoRoot "bin"
+$SolutionName = "LookupMultiSelectSolution"
+# ============================================
+
 param(
-    [string]$OutputPath = "C:\Basith\MultiSelectPCF\bin",
-    [string]$SolutionName = "LookupMultiSelectSolution"
+    [string]$OutputPathOverride = "",
+    [string]$SolutionNameOverride = ""
 )
+
+# Use override parameters if provided
+if ($OutputPathOverride) { $OutputPath = $OutputPathOverride }
+if ($SolutionNameOverride) { $SolutionName = $SolutionNameOverride }
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "PCF Build & PAC Solution Pack" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Repo Root:     $RepoRoot" -ForegroundColor Gray
+Write-Host "PCF Path:      $PcfPath" -ForegroundColor Gray
+Write-Host "Solution Path: $SolutionPath" -ForegroundColor Gray
+Write-Host "Output Path:   $OutputPath" -ForegroundColor Gray
 Write-Host "========================================" -ForegroundColor Cyan
 
 # Check if PAC CLI is installed
@@ -22,13 +41,12 @@ Write-Host "PAC CLI found and ready" -ForegroundColor Green
 
 # Step 1: Build PCF bundle
 Write-Host "`n[Step 1] Building PCF bundle with npm..." -ForegroundColor Yellow
-$pcfPath = "C:\Basith\MultiSelectPCF\MultiSelectLookup"
-if (-not (Test-Path $pcfPath)) {
-    Write-Host "ERROR: PCF project path not found: $pcfPath" -ForegroundColor Red
+if (-not (Test-Path $PcfPath)) {
+    Write-Host "ERROR: PCF project path not found: $PcfPath" -ForegroundColor Red
     exit 1
 }
 
-Push-Location $pcfPath
+Push-Location $PcfPath
 Write-Host "Running: npm run build" -ForegroundColor Cyan
 npm run build
 if ($LASTEXITCODE -ne 0) {
@@ -48,10 +66,9 @@ if (-not (Test-Path $OutputPath)) {
 
 # Step 3: Pack solution using PAC CLI
 Write-Host "`n[Step 3] Packing solution with PAC CLI..." -ForegroundColor Yellow
-$solutionPath = "C:\Basith\MultiSelectPCF\LookupMultiSelectSolution"
-$zipPath = "$OutputPath\$SolutionName.zip"
+$zipPath = Join-Path $OutputPath "$SolutionName.zip"
 
-Push-Location $solutionPath
+Push-Location $SolutionPath
 Write-Host "Running: pac solution pack --folder src --zipfile '$zipPath'" -ForegroundColor Cyan
 pac solution pack --folder src --zipfile $zipPath
 if ($LASTEXITCODE -ne 0) {
