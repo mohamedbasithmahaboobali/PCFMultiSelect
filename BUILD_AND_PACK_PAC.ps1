@@ -12,8 +12,8 @@ $SolutionName = "LookupMultiSelectSolution"
 # ============================================
 
 param(
-    [string]$OutputPathOverride = "",
-    [string]$SolutionNameOverride = ""
+    [string]$OutputPathOverride = $null,
+    [string]$SolutionNameOverride = $null
 )
 
 # Use override parameters if provided
