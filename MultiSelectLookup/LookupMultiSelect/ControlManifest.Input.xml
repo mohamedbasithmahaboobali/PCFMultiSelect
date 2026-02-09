@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="MultiSelectLookup" constructor="LookupMultiSelect" version="1.0.0" display-name-key="LookupMultiSelect" description-key="Multi-Select Lookup Control for Model-Driven Apps" control-type="standard">
+    <external-service-usage enabled="true">
+      <domain>cdnjs.cloudflare.com</domain>
+    </external-service-usage>
+
+    <!-- Bound property: the lookup field this control is attached to -->
+    <property name="selectedItems" display-name-key="Selected Items" description-key="The lookup field bound to this control" of-type="Lookup.Simple" usage="bound" required="true" />
+
+    <!-- Hidden field to store JSON data of selected lookup records (Multiple Lines of Text) -->
+    <property name="hiddenField" display-name-key="Hidden Field (JSON Storage)" description-key="A Multiple Lines of Text field to store selected lookup records as JSON" of-type="Multiple" usage="bound" required="true" />
+
+    <!-- Field to store comma-separated names of selected records -->
+    <property name="recordNamesField" display-name-key="Record Names Field" description-key="A Single Line of Text field to store names of selected records" of-type="SingleLine.Text" usage="bound" required="false" />
+
+    <!-- Entity logical name for the lookup -->
+    <property name="LookupEntityLogicalName" display-name-key="Lookup Entity Logical Name" description-key="Logical name of the target entity (e.g. contact, account)" of-type="SingleLine.Text" usage="input" required="true" />
+
+    <!-- Display name of the lookup entity (for the New button) -->
+    <property name="LookupEntityDisplayName" display-name-key="Lookup Entity Display Name" description-key="Display name for the New Record button (e.g. Contact)" of-type="SingleLine.Text" usage="input" required="false" />
+
+    <!-- Name field logical name (the field displayed in lookup) -->
+    <property name="NameFieldLogicalName" display-name-key="Name Field Logical Name" description-key="Logical name of the display field (e.g. fullname, name)" of-type="SingleLine.Text" usage="input" required="true" />
+
+    <!-- Optional subtext field 1 -->
+    <property name="LookupOption1LogicalName" display-name-key="Subtext Field 1" description-key="Optional subtext field (e.g. emailaddress1)" of-type="SingleLine.Text" usage="input" required="false" />
+
+    <!-- Optional subtext field 2 -->
+    <property name="LookupOption2LogicalName" display-name-key="Subtext Field 2" description-key="Optional subtext field (e.g. mobilephone)" of-type="SingleLine.Text" usage="input" required="false" />
+
+    <resources>
+      <code path="index.ts" order="1" />
+      <css path="css/MultiSelectLookup.css" order="1" />
+    </resources>
+
+    <feature-usage>
+      <uses-feature name="Utility" required="true" />
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+  </control>
+</manifest>
