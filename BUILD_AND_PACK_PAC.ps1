@@ -57,6 +57,19 @@ if ($LASTEXITCODE -ne 0) {
 Pop-Location
 Write-Host "PCF bundle built successfully" -ForegroundColor Green
 
+# Step 1.5: Copy built PCF control into solution src so PAC pack includes it
+Write-Host "`n[Step 1.5] Copy built PCF control into solution src (CustomControls)" -ForegroundColor Yellow
+$controlOut = Join-Path $PcfPath "out\controls\LookupMultiSelect"
+$destControls = Join-Path $SolutionPath "src\CustomControls\MultiSelectLookup.LookupMultiSelect"
+if (Test-Path $controlOut) {
+    if (Test-Path $destControls) { Remove-Item $destControls -Recurse -Force }
+    New-Item -ItemType Directory -Path $destControls -Force | Out-Null
+    Copy-Item -Path (Join-Path $controlOut "*") -Destination $destControls -Recurse -Force
+    Write-Host "Copied built PCF control from $controlOut to $destControls" -ForegroundColor Green
+} else {
+    Write-Host "Warning: built PCF control folder not found: $controlOut" -ForegroundColor Yellow
+}
+
 # Step 2: Ensure output directory exists
 Write-Host "`n[Step 2] Preparing output directory..." -ForegroundColor Yellow
 if (-not (Test-Path $OutputPath)) {
