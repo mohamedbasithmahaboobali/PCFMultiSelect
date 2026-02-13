@@ -46,6 +46,28 @@ dotnet restore --configfile ..\nuget.config
 - Packages restored successfully
 - Message: `Restore complete`
 
+**Common Issues:**
+
+**Issue: "Multiple sources claim to download the nupkg" or Corporate feed interference**
+```
+Error: feed 'ict-nuget' lists package but nupkg failed
+```
+**Solution:** The nuget.config uses `<clear />` to ignore all default feeds and only use Local + NuGet.org. If still failing:
+```powershell
+# Clear NuGet cache
+dotnet nuget locals all --clear
+
+# Retry restore
+dotnet restore --configfile ..\nuget.config
+```
+
+**Issue: "Unable to find package Microsoft.NETFramework.ReferenceAssemblies.net472"**
+**Solution:** Download the missing package:
+```powershell
+cd C:\Basith\MultiSelectPCF
+nuget.exe install Microsoft.NETFramework.ReferenceAssemblies.net472 -OutputDirectory LocalNuGetFeed
+```
+
 ---
 
 ### Step 0.3: Build Solution with MSBuild (dotnet)
