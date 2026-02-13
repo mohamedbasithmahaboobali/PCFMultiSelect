@@ -1,0 +1,22 @@
+# NuGet packages and local feed
+LocalNuGetFeed/
+nuget.exe
+
+# Build outputs
+bin/
+obj/
+out/
+
+# node_modules
+node_modules/
+
+# IDE
+.vs/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
